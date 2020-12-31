@@ -6,17 +6,17 @@ import paho.mqtt.client as mqtt
 import json
 import os, time,sys
 import requests
-THINGSBOARD_HOST = '172.16.1.42'
+THINGSBOARD_HOST = '172.16.1.46'
 ACCESS_TOKEN = 'xH7vBQWYgeFZJ77JjmAx'
 #INTERVAL = 2
 
 # Set the GPIO as LOW
-ser = serial.Serial(port='/dev/ttyS4',
-                    baudrate=9600,
-                    parity=serial.PARITY_NONE,
-                    stopbits=serial.STOPBITS_ONE,
-                    bytesize=serial.EIGHTBITS,
-                    timeout=1)
+# ser = serial.Serial(port='/dev/ttyS4',
+#                     baudrate=9600,
+#                     parity=serial.PARITY_NONE,
+#                     stopbits=serial.STOPBITS_ONE,
+#                     bytesize=serial.EIGHTBITS,
+#                     timeout=1)
 
 url2 = 'http://192.168.7.2:8081/GateWay/updatedata.php'
 url3 ='http://192.168.7.2:8081/GateWay/view.php'
@@ -35,12 +35,12 @@ def on_message(client, userdata, msg):
     print ('Topic: ' + msg.topic + '\nMessage: ' + str(msg.payload))
     # Decode JSON request
     data = json.loads(msg.payload)
-    
+
     if("params"in data):
       if data['params'] == True:
         a=(data['method']+'QC17ok')
-        ser.write(str.encode(a))
-        ser.flush()
+        # ser.write(str.encode(a))
+        # ser.flush()
         time.sleep(1)
         for i in data['method']:
 
@@ -59,8 +59,8 @@ def on_message(client, userdata, msg):
           client.publish('v1/devices/me/telemetry', json.dumps(a4), 1)
       elif data['params'] == False:
         a=(data['method']+'QC12ok')
-        ser.write(str.encode(a))
-        ser.flush()
+        # ser.write(str.encode(a))
+        # ser.flush()
         time.sleep(1)
         for i in data['method']:
           data4 = {'GR': i[0:1],'NODE':i[0:2],'In1':"OFF",'Out1': "OFF"}
